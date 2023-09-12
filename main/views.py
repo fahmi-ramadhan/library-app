@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 def show_main(request):
     context = {
+        'student_name': 'Fahmi Ramadhan',
+        'class': 'PBP A',
         'name': 'Operating System Concepts',
         'author': 'Abraham Silberschatz, Peter B. Galvin, and Greg Gagne',
         'category': 'Computer Science',
