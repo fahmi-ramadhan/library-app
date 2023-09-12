@@ -119,3 +119,82 @@ Untuk melakukan _deployment_ ke Adaptable, saya login ke [Adaptable.io](https://
 
 ## Mengapa Menggunakan _Virtual Environment_?
 
+_Virtual environment_ memungkinkan kita untuk membuat lingkungan terisolasi untuk setiap proyek Django kita. Dengan ini, kita bisa dengan mudah megelola berbagai dependensi untuk masing-masing proyek Django dan menghindari konflik antara `library` atau `package` dengan versi yang berbeda yang mungkin dibutuhkan oleh proyek yang berbeda. Selain itu, _virtual environment_ juga memudahkan kita dalam pemindahan proyek yang sedang dikembangkan ke _host_ lain tanpa khawatir akan konflik antara dependensi. Meskipun kita bisa saja membuat aplikasi web berbasis Django tanpa menggunakan _virtual environment_, tetapi ini tidak disarankan karena akan lebih sulit untuk mengelola berbagai dependensi dan lebih berisiko terjadi konflik dengan proyek-proyek lain.
+
+## Penjelasan MVC, MVT, MVVM Beserta Perbedaannya
+
+MVC, MVT, dan MVVM adalah beberapa contoh paradigma pemrograman web yang memisahkan komponen-komponen pada aplikasi, seperti logika dan tampilan aplikasi untuk memudahkan pengelolaannya.
+
+- MVC memisahkan aplikasi menjadi tiga komponen, yaitu _model, view, dan controller_. _Model_ berisi definisi dari data-data yang akan disimpan ke dalam _database_. Kemudian, _view_ berhubungan dengan _user interface_ untuk menampilkan halaman ke pengguna. Sementara itu, _Controller_ berisi logika utama program yang mungkin memerlukan informasi dari _database_ melalui _model_.
+- MVT memisahkan aplikasi menjadi tiga komponen, yaitu _mode, view, dan template_. Sama halnya seperti MVC, _model_ berisi definisi dari data-data yang akan disimpan ke _database_. Namun, perbedaan antara keduanya terletak pada _view_ dan _template_. _View_ dalam MVT melakukan fungsi yang sama dengan _controller_ dalam MVC, sedangkan _template_ dalam MVT melakukan fungsi yang sama dengan _view_ dalam MVC. Django adalah salah satu framework yang menggunakan MVT.
+- MVVM memisahkan juga aplikasi menjadi tiga komponen, yaitu _model, view, dan view-model_. Secara dasar, MVVM mirip dengan MVC, di mana _model_ dan _view_ dalam kedua paradigma tersebut melakukan fungsi yang serupa. Kemudian, _view-model_ melakukan fungsi yang sama dengan _controller_ dalam MVC.
+
+Secara keseluruhan, ketiganya memiliki tujuan yang serupa, yaitu mengisolasi logika aplikasi dari _user interface_. Namun, perbedaan utama di antara ketiganya terletak pada bagaimana okmponen-komponen tersebut disusun dan berhubungan satu sama lain.
+
+## BONUS
+
+Pada _file_ `tests.py`, saya menambahkan sebuah _unit test_ tambahan untuk mengetes apakah _model_ benar dan apakah data berhasil dimasukkan ke _database_.
+```python
+from django.test import TestCase, Client
+from main.models import Item
+
+class mainTest(TestCase):
+    def test_main_url_is_exist(self):
+        response = Client().get('/main/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_main_using_main_template(self):
+        response = Client().get('/main/')
+        self.assertTemplateUsed(response, 'main.html')
+
+class itemTest(TestCase):
+    def test_item(self):
+        item = Item.objects.create(
+            name="Operating System Concepts",
+            author="Abraham Silberschatz, Peter B. Galvin, and Greg Gagne",
+            category="Computer Science",
+            amount=10,
+            description="Operating System Concepts book is an informative guide to operating systems with an overview of all the major aspects. The book deals with topics like computer process, operating systems and their functioning, and design. It also looks at special-purpose systems, storage management, security, distributed systems and memory."
+        )
+        self.assertEqual(item.name, "Operating System Concepts")
+        self.assertEqual(item.author, "Abraham Silberschatz, Peter B. Galvin, and Greg Gagne")
+        self.assertEqual(item.category, "Computer Science")
+        self.assertEqual(item.amount, 10)
+        self.assertEqual(item.description, "Operating System Concepts book is an informative guide to operating systems with an overview of all the major aspects. The book deals with topics like computer process, operating systems and their functioning, and design. It also looks at special-purpose systems, storage management, security, distributed systems and memory.")
+```
+Berikut adalah hasil _test_ dan _report_-nya:
+```
+(env) C:\Users\USER\library_app>coverage run --source="." manage.py test
+Found 3 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.054s
+
+OK
+Destroying test database for alias 'default'...
+
+(env) C:\Users\USER\library_app>coverage report --show-missing
+Name                                       Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------
+library_app\__init__.py                        0      0   100%
+library_app\asgi.py                            4      4     0%   10-16
+library_app\settings.py                       18      0   100%
+library_app\urls.py                            3      0   100%
+library_app\wsgi.py                            4      4     0%   10-16
+main\__init__.py                               0      0   100%
+main\admin.py                                  1      0   100%
+main\apps.py                                   4      0   100%
+main\migrations\0001_initial.py                5      0   100%
+main\migrations\0002_book_author.py            4      0   100%
+main\migrations\0003_rename_book_item.py       4      0   100%
+main\migrations\__init__.py                    0      0   100%
+main\models.py                                 7      0   100%
+main\tests.py                                 17      0   100%
+main\urls.py                                   4      0   100%
+main\views.py                                  4      0   100%
+manage.py                                     12      2    83%   12-13
+------------------------------------------------------------------------
+TOTAL                                         91     10    89%
+```
