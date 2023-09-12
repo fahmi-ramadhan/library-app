@@ -109,7 +109,7 @@ Untuk melakukan _deployment_ ke Adaptable, saya login ke [Adaptable.io](https://
 
 ## Bagan _Client Request and Response_ Aplikasi Web Berbasis Django
 
-![Alt text]("images/bagan.jpg)
+![Alt text](Images/bagan.jpg)
 
 1. _Client_ mengakses website dan _Web Server_ menerima _request_.
 2. WSGI memproses server HTTP untuk situs web berbasis Python.
