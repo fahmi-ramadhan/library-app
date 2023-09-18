@@ -6,6 +6,35 @@ Nama: Fahmi Ramadhan<br>
 NPM: 2206026473<br>
 Kelas: PBP A<br>
 
+
+# Tugas 3: Implementasi _Form_ dan _Data Delivery_ pada Django
+
+<details open>
+
+## Perbedaan _form_ `POST` dan _form_ `GET` dalam Django
+
+## Perbedaan XML, JSON, dan HTML dalam konteks pengiriman data
+
+## Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
+
+## Implementasi _Checklist_
+
+### 1. Membuat input `form` untuk menambahkan objek model
+
+### 2. Menambahkan lima fungsi `views` untuk melihat objek yang sudah ditambahkan dalam format HTML, XML, JSON, XML _by ID_, dan JSON _by ID_
+
+### 3. Membuat routing URL untuk masing-masing `views`
+
+### 4. Mengakses kelima URL di poin 2 menggunakan Postman
+
+### 5. Melakukan `add`-`commit`-`push` ke GitHub
+
+</details>
+
+# Tugas 2: Implementasi _Model-View-Template_ (MVT) pada Django
+
+<details>
+
 ## Implementasi _Checklist_
 
 ### 1. Membuat sebuah proyek Django baru.
@@ -198,3 +227,4 @@ manage.py                                     12      2    83%   12-13
 ------------------------------------------------------------------------
 TOTAL                                         91     10    89%
 ```
+</details>
