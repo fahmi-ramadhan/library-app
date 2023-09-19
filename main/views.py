@@ -28,10 +28,6 @@ def add_book(request):
     context = {'form': form}
     return render(request, "add_book.html", context)
 
-def show_html(request):
-    data = Item.objects.all()
-    return HttpResponse(serializers.serialize('html', data), content_type="application/html")
-
 def show_xml(request):
     data = Item.objects.all()
     return HttpResponse(serializers.serialize('xml', data), content_type="application/xml")
