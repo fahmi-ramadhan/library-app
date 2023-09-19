@@ -5,10 +5,13 @@
 
     <h2>{{student_name}} - {{class}}</h2>
 
+    <h3>There are currently {{books|length}} book titles stored in the system</h3>
+
     <table>
         <tr>
             <th>Name</th>
             <th>Author</th>
+            <th>Amount</th>
             <th>Category</th>
             <th>Description</th>
         </tr>
@@ -17,6 +20,7 @@
             <tr>
                 <td>{{book.name}}</td>
                 <td>{{book.author}}</td>
+                <td>{{book.amount}}</td>
                 <td>{{book.category}}</td>
                 <td>{{book.description}}</td>
             </tr>
