@@ -8,12 +8,16 @@ from django.core import serializers
 
 def show_main(request):
     books = Item.objects.all()
+    total_books = 0
+    for book in books:
+        total_books += book.amount
 
     context = {
         'app_name': 'Library Management System',
         'student_name': 'Fahmi Ramadhan',
         'class': 'PBP A',
-        'books': books, 
+        'books': books,
+        'total_books': total_books,
     }
 
     return render(request, "main.html", context)

@@ -122,29 +122,33 @@ Kemudian, saya membuat berkas `add_book.html` pada direktori `main/templates` ya
 
 #### a. Fungsi untuk melihat objek dalam format HTML
 
-Saya menambahkan `books` yang berisi semua _object Item_ dari _database_ ke dalam `context` pada fungsi `show_main` untuk ditampilkan di halaman utama.
+Saya menambahkan `books` yang berisi semua _object Item_ dari _database_ dan `total_books` **(BONUS)** ke dalam `context` pada fungsi `show_main` untuk ditampilkan di halaman utama.
 
 ```python
 def show_main(request):
     books = Item.objects.all()
+    total_books = 0
+    for book in books:
+        total_books += book.amount
 
     context = {
         'app_name': 'Library Management System',
         'student_name': 'Fahmi Ramadhan',
         'class': 'PBP A',
-        'books': books, 
+        'books': books,
+        'total_books': total_books,
     }
 
     return render(request, "main.html", context)
 ```
 
-Selanjutnya, saya menambahkan kode pada `main.html` untuk menampilkan banyak judul buku yang ada **(BONUS)**, informasi setiap buku dalam bentuk tabel, serta tombol 'Add New Book' yang akan _redirect_ ke `add_book.html`.
+Selanjutnya, saya menambahkan kode pada `main.html` untuk menampilkan jumlah buku yang ada **(BONUS)**, informasi setiap buku dalam bentuk tabel, serta tombol 'Add New Book' yang akan _redirect_ ke `add_book.html`.
 
 ```html
 {% block content %}
     ...
 
-    <h3>There are currently {{books|length}} book titles stored in the system</h3>
+    <h3>There are currently {{total_books}} books stored in the system</h3>
 
     <table>
         <tr>
