@@ -148,7 +148,7 @@ Selanjutnya, saya menambahkan kode pada `main.html` untuk menampilkan jumlah buk
 {% block content %}
     ...
 
-    <h3>There are currently {{total_books}} books stored in the system</h3>
+    <h3>There are currently {{total_books}} books with {{books|length}} book titles stored in the system</h3>
 
     <table>
         <tr>
