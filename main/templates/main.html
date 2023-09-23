@@ -1,9 +1,39 @@
-<h1>{{app_name}}</h1>
+{% extends 'base.html' %}
 
-<h2>{{student_name}} - {{class}}</h2>
+{% block content %}
+    <h1>{{app_name}}</h1>
 
-<p><strong>Name: </strong>{{name}}</p>
-<p><strong>Author: </strong>{{author}}</p>
-<p><strong>Category: </strong>{{category}}</p>
-<p><strong>Amount: </strong>{{amount}}</p>
-<p><strong>Description: </strong>{{description}}</p>
+    <h2>{{student_name}} - {{class}}</h2>
+
+    <h3>There are currently {{total_books}} books with {{books|length}} book titles stored in the system</h3>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+
+        {% for book in books %}
+            <tr>
+                <td>{{book.name}}</td>
+                <td>{{book.author}}</td>
+                <td>{{book.category}}</td>
+                <td>{{book.amount}}</td>
+                <td>{{book.description}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <br />
+
+    <a href="{% url 'main:add_book' %}">
+        <button>
+            Add New Book
+        </button>
+    </a>
+
+{% endblock content %}
+

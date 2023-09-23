@@ -1,10 +1,243 @@
 # Library Management System
 
-🌐[Link Aplikasi](https://library-app.adaptable.app/main/)🌐
+🌐[Link Aplikasi](https://youtu.be/dQw4w9WgXcQ?si=4shjklB1tHnOYQMi)🌐
 
 Nama: Fahmi Ramadhan<br>
 NPM: 2206026473<br>
 Kelas: PBP A<br>
+
+
+# Tugas 3: Implementasi _Form_ dan _Data Delivery_ pada Django
+
+<details open>
+
+## Perbedaan _form_ `POST` dan _form_ `GET` dalam Django
+
+`POST` dan `GET` adalah dua metode HTTP yang digunakan saat berurusan dengan _form_. Berikut adalah perbedaannya.
+
+### 1. POST
+* Data _form_ dikemas oleh _browser_, di-_encode_ untuk pengiriman, dan kemudian dikirim ke _server_.
+* Digunakan untuk _request_ yang dapat mengubah status sistem, seperti mengubah _database_
+* Lebih aman untuk data sensitif seperti _password_ karena data tidak terlihat dalam URL dan tidak muncul dalam _browser history_ atau _server log_ dalam bentuk _plain text_.
+* Cocok untuk mengirim data besar atau data biner seperti gambar, serta untuk formulir administrasi dengan perlindungan tambahan seperti CSRF (_Cross-site Request Forgery_) _protection_.
+
+### 2. GET
+* Data yang dikirimkan dikemas sebagai _string_ dan dijadikan bagian dari URL yang dikirimkan ke _server_.
+* Digunakan untuk _request_ yang tidak memengaruhi status sistem.
+* Data muncul dalam URL, yang berarti dapat terlihat dalam _browser history_ dan _server log_ sehingga kurang aman untuk data sensitif.
+* Cocok untuk formulir pencarian web karena URL yang dihasilkan dapat dengan mudah di-_bookmark_, dibagikan, atau di-_resubmit_.
+
+Sumber: https://docs.djangoproject.com/en/4.2/topics/forms/
+
+## Perbedaan XML, JSON, dan HTML dalam konteks pengiriman data
+
+### 1. XML (eXtensible Markup Language)
+* XML adalah sebuah _markup language_ yang dirancang untuk menyimpan dan mengantarkan data yang mudah dibaca oleh manusia.
+* XML menggunakan _tag-tag_ yang mendefinisikan struktur data dalam dokumen.
+
+### 2. JSON (JavaScript Object Notation)
+* JSON adalah sebuah format yang digunakan untuk menyimpan, membaca, dan menukar informasi dari _web server_ yang mudah dibaca oleh manusia.
+* JSON menggunakan _key-value pairs_ untuk merepresentasikan data seperti object pada JavaScript.
+* JSON biasanya lebih efisien dalam hal ukuran file dibandingkan dengan XML.
+
+### 3. HTML (HyperText Markup Language)
+* HTML adalah sebuah sebuah _markup language_ yang digunakan untuk mengatur tampilan dan struktur konten di halaman web.
+* HTML mengandung _tag-tag_ bawaan untuk mengatur elemen-elemen halaman web dan biasanya memiliki atribut yang digunakan untuk menambahkan informasi tambahan mengenai elemen tersebut.
+
+Jadi, perbedaan mendasar antara ketiganya adalah XML dan JSON digunakan untuk menyimpan dan mengirimkan data sedangkan HTML digunakan untuk mengatur tampilan halaman web.
+
+## Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
+
+* JSON mudah untuk dipahami oleh manusia karena menggunakan format _key-value pairs_ yang bentuknya sering ditemui di banyak bahasa pemrograman dibandingkan dengan XML yang menggunakan _tag_.
+* JSON didukung oleh sebagian besar bahasa pemrograman modern sehingga data dalam format JSON dapat dengan mudah diolah dan dimanipulasi di berbagai _platform_. _Browser_ modern memiliki dukungan bawaan untuk melakukan _parsing_ dan konversi data JSON menjadi _object_ JavaScript.
+* JSON memiliki format yang lebih ringan dibandingkan XML karena ukurannya yang lebih kecil, struktur yang lebih simpel, tidak adanya informasi yang redundan, seperti _closing tag_ atau _namespace_ sehingga mengurangi _bandwidth_ dan waktu pemrosesan yang dibutuhkan untuk transfer dan manipulasi data.
+
+## Implementasi _Checklist_
+
+### 1. Membuat input `form` untuk menambahkan objek model
+
+Sebelum membuat _form_, saya membuat kerangka _views_ terlebih dahulu agar kode lebih terstruktur dan nantinya akan memudahkan saya untuk memastikan konsistensi desain dan memperkecil kemungkinan redundansi kode. Untuk itu, saya membuat berkas baru bernama `base.html` pada _folder_ `templates` di _root folder_ dan menjadikannya sebagai _template_ dasar dengan menyesuaikan isi `TEMPLATES` pada `settings.py`. Kemudian, saya mengubah `main.html` agar meng-_extends_ `base.html` dan _tag-tag_ html ada di dalam _block content_
+
+Selanjutnya, saya membuat berkas `forms.py` pada direktori `main` untuk membuat struktur _form_ penambahan buku baru.
+
+``` python
+from django.forms import ModelForm
+from main.models import Item
+
+class ItemForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ["name", "author", "category", "amount", "description"]
+```
+
+Kemudian, saya membuat fungsi `add_book` yang menerima parameter `request` pada `views.py` untuk menerima data buku baru, menyimpannya ke _database_, dan kembali ke halaman utama setelah berhasil menyimpan.
+
+```python
+def add_book(request):
+    form = ItemForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    
+    context = {'form': form}
+    return render(request, "add_book.html", context)
+```
+
+Setelah fungsi dibuat, saya menambahkan _path url_ ke dalam `urlpatterns` pada `urls.py` di `main` untuk mengakses fungsi tersebut.
+
+```python
+urlpatterns = [
+    ...
+    path('add_book', add_book, name='add_book'),
+    ...
+]
+```
+
+Kemudian, saya membuat berkas `add_book.html` pada direktori `main/templates` yang berisi _fields_ `form` untuk menambahkan data buku baru dan tombol _submit_ untuk mengirimkan _request_ ke fungsi `add_book(request)`.
+
+```html
+{% extends 'base.html' %} 
+
+{% block content %}
+<h1>Add New Book</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Add Book"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+```
+
+### 2. Menambahkan lima fungsi `views` untuk melihat objek yang sudah ditambahkan dalam format HTML, XML, JSON, XML _by_ ID, dan JSON _by_ ID
+
+#### a. Fungsi untuk melihat objek dalam format HTML
+
+Saya menambahkan `books` yang berisi semua _object Item_ dari _database_ dan `total_books` **(BONUS)** ke dalam `context` pada fungsi `show_main` untuk ditampilkan di halaman utama.
+
+```python
+def show_main(request):
+    books = Item.objects.all()
+    total_books = 0
+    for book in books:
+        total_books += book.amount
+
+    context = {
+        'app_name': 'Library Management System',
+        'student_name': 'Fahmi Ramadhan',
+        'class': 'PBP A',
+        'books': books,
+        'total_books': total_books,
+    }
+
+    return render(request, "main.html", context)
+```
+
+Selanjutnya, saya menambahkan kode pada `main.html` untuk menampilkan jumlah buku yang ada **(BONUS)**, informasi setiap buku dalam bentuk tabel, serta tombol 'Add New Book' yang akan _redirect_ ke `add_book.html`.
+
+```html
+{% block content %}
+    ...
+
+    <h3>There are currently {{total_books}} books with {{books|length}} book titles stored in the system</h3>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+
+        {% for book in books %}
+            <tr>
+                <td>{{book.name}}</td>
+                <td>{{book.author}}</td>
+                <td>{{book.category}}</td>
+                <td>{{book.amount}}</td>
+                <td>{{book.description}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <br />
+
+    <a href="{% url 'main:add_book' %}">
+        <button>
+            Add New Book
+        </button>
+    </a>
+
+{% endblock content %}
+```
+
+#### b. Fungsi untuk melihat objek dalam format XML, JSON, XML _by_ ID, dan JSON _by_ ID
+
+```python
+def show_xml(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize('xml', data), content_type="application/xml")
+
+def show_json(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize('json', data), content_type="application/json")
+
+def show_xml_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+```
+
+### 3. Membuat routing URL untuk masing-masing `views`
+
+Untuk membuat routing URL, saya membuka `urls.py` pada direktori `main`, kemudian meng-_import_ fungsi-fungsi `views` dan menambahkannya ke dalam `urlpatterns`.
+
+```python
+from django.urls import path
+from main.views import show_main, add_book, show_xml, show_json, show_xml_by_id, show_json_by_id
+
+app_name = 'main'
+
+urlpatterns = [
+    path('', show_main, name='show_main'),
+    path('add_book', add_book, name='add_book'),
+    path('xml/', show_xml, name='show_xml'),
+    path('json/', show_json, name='show_json'),
+    path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<int:id>/', show_json_by_id, name='show_json_by_id'),
+]
+```
+
+### 4. Mengakses kelima URL di poin 2 menggunakan Postman
+
+![HTML](Images/objectInHTML.png)
+![XML](Images/objectInXML.png)
+![JSON](Images/objectInJSON.png)
+![XML By ID](Images/objectInXMLByID.png)
+![JSON By ID](Images/objectInJSONByID.png)
+
+### 5. Melakukan `add`-`commit`-`push` ke GitHub
+
+Sebelum melakukan `add`-`commit`-`push`, saya membuat dan beralih ke _branch_ baru bernama `dev` dengan menggunakan perintah `git checkout -b dev`. Kemudian, saya baru melakukan `add`, `commit`, serta `push` menggunakan `git push origin dev`.
+
+</details>
+
+# Tugas 2: Implementasi _Model-View-Template_ (MVT) pada Django
+
+<details>
 
 ## Implementasi _Checklist_
 
@@ -198,3 +431,4 @@ manage.py                                     12      2    83%   12-13
 ------------------------------------------------------------------------
 TOTAL                                         91     10    89%
 ```
+</details>
