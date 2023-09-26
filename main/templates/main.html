@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{{app_name}}</h1>
 
-    <h2>{{student_name}} - {{class}}</h2>
+    <h2>{{name}} - {{class}}</h2>
 
     <h3>There are currently {{total_books}} books with {{books|length}} book titles stored in the system</h3>
 
@@ -14,6 +14,7 @@
             <th>Category</th>
             <th>Amount</th>
             <th>Description</th>
+            <th colspan="3">Actions</th>
         </tr>
 
         {% for book in books %}
@@ -23,6 +24,24 @@
                 <td>{{book.category}}</td>
                 <td>{{book.amount}}</td>
                 <td>{{book.description}}</td>
+                <td>
+                    <form action="{% url 'main:add_book_amount' book.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="Increment">➕</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'main:dec_book_amount' book.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="Decrement">➖</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'main:remove_book' book.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="Remove">❌</button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     </table>

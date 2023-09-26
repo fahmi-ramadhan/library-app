@@ -19,7 +19,7 @@ def show_main(request):
 
     context = {
         'app_name': 'Library Management System',
-        'student_name': request.user.username,
+        'name': request.user.username,
         'class': 'PBP A',
         'books': books,
         'total_books': total_books,
@@ -39,6 +39,12 @@ def add_book(request):
     
     context = {'form': form}
     return render(request, "add_book.html", context)
+
+def remove_book(request, book_id):
+    if request.method == 'POST' and 'Remove' in request.POST:
+        book = Item.objects.get(id=book_id)
+        book.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
 
 def register(request):
     form = UserCreationForm()
@@ -72,6 +78,20 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def add_book_amount(request, book_id):
+    if request.method == 'POST' and 'Increment' in request.POST:
+        book = Item.objects.get(id=book_id)
+        book.amount += 1
+        book.save()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def dec_book_amount(request, book_id):
+    if request.method == 'POST' and 'Decrement' in request.POST:
+        book = Item.objects.get(id=book_id)
+        book.amount -= 1
+        book.save()
+    return HttpResponseRedirect(reverse('main:show_main'))
 
 def show_xml(request):
     data = Item.objects.all()
