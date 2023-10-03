@@ -1,66 +1,90 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{app_name}}</h1>
 
-    <h2>{{name}} - {{class}}</h2>
+<header class="bg-blue-500 shadow fixed w-full z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex-shrink-0 flex items-center">
+                <h1 class="text-white font-bold text-2xl">{{ app_name }}</h1>
+            </div>
+            <div class="flex items-center justify-end">
+                <a href="{% url 'main:add_book' %}">
+                    <button class="bg-blue-100 hover:bg-blue-700 hover:text-white text-blue-500 font-bold py-2 px-4 rounded">
+                        Add New Book
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
 
-    <h3>There are currently {{total_books}} books with {{books|length}} book titles stored in the system</h3>
+<div class="flex justify-center">
 
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Author</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th colspan="3">Actions</th>
-        </tr>
+    <div class="container mt-20">
 
-        {% for book in books %}
+        <div class="flex mt-4">
+            <h5 class="mt-1 mr-2">logged in as: <span class="font-bold">{{name}}</span></h5>
+            <a href="{% url 'main:logout' %}">
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded" type="submit">
+                    Logout
+                </button>
+            </a>
+        </div>
+
+        <h5 class="mt-2">Last login session: {{ last_login }}</h5>
+
+        {% if books|length != 0  %}
+        <h5 class="mr-2 mt-4">There are currently 
+            <span class="font-bold">{{total_books}}</span> books with
+            <span class="font-bold">{{books|length}}</span> book titles stored in the system
+        </h5>
+        
+        <table class="mt-4">
             <tr>
-                <td>{{book.name}}</td>
-                <td>{{book.author}}</td>
-                <td>{{book.category}}</td>
-                <td>{{book.amount}}</td>
-                <td>{{book.description}}</td>
-                <td>
-                    <form action="{% url 'main:add_book_amount' book.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name="Increment">➕</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{% url 'main:dec_book_amount' book.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name="Decrement">➖</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{% url 'main:remove_book' book.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name="Remove">❌</button>
-                    </form>
-                </td>
+                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">NAME</th>
+                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">AUTHOR</th>
+                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">CATEGORY</th>
+                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">AMOUNT</th>
+                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">DESCRIPTION</th>
+                <th class="px-4 py-2 font-bold border-t border-b border-blue-500" colspan="3">ACTIONS</th>
             </tr>
-        {% endfor %}
-    </table>
 
-    <h5>Sesi terakhir login: {{ last_login }}</h5>
+            {% for book in books %}
+                <tr>
+                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.name}}</td>
+                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.author}}</td>
+                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.category}}</td>
+                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.amount}}</td>
+                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.description}}</td>
+                    <td class="px-4 py-2 border-b border-blue-500">
+                        <form action="{% url 'main:add_book_amount' book.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="Increment" title="Add One Book">➕</button>
+                        </form>
+                    </td>
+                    <td class="px-4 py-2 border-b border-blue-500">
+                        <form action="{% url 'main:dec_book_amount' book.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="Decrement" title="Remove One Book">➖</button>
+                        </form>
+                    </td>
+                    <td class="px-4 py-2 border-b border-blue-500">
+                        <form action="{% url 'main:remove_book' book.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="Remove" title="Remove Books">❌</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <h5 class="mt-4 font-bold text-xl">There are no books stored in the system for this account</h5>
+        {% endif %}
 
-    <br />
+    </div>
 
-    <a href="{% url 'main:add_book' %}">
-        <button>
-            Add New Book
-        </button>
-    </a>
-
-    <a href="{% url 'main:logout' %}">
-        <button>
-            Logout
-        </button>
-    </a>
+</div>
 
 {% endblock content %}
 

@@ -1,19 +1,26 @@
 {% extends 'base.html' %} 
 
 {% block content %}
-<h1>Add New Book</h1>
+<div class="flex justify-center items-center h-screen">
 
-<form method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Book"/>
-            </td>
-        </tr>
-    </table>
-</form>
+    <div class = "add_book bg-blue-50 p-8 rounded shadow-md w-full md:w-1/3">
+
+        <h1 class="text-2xl font-bold mb-4">Add New Book</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <table class="w-full mb-4">
+                {{ form.as_table }}
+            </table>
+            <div class="flex justify-end">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+                    Add Book
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
 
 {% endblock %}
