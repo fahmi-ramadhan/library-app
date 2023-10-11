@@ -6,4 +6,4 @@ requests
 urllib3
 coverage
 django-environ
-django-tailwind[reload]
+django-tailwind
