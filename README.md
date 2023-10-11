@@ -26,13 +26,13 @@ Kelas: PBP A<br>
 
 ### 3. Membuat path `/create-ajax/` yang mengarah ke fungsi _view_.
 
-### 4. Melakukan 
+### 4. Melakukan perintah `collectstatic`.
 
 </details>
 
 # Tugas 5: Desain Web Menggunakan HTML, CSS dan FrameWork CSS
 
-<details open>
+<details>
 
 ## Manfaat dari setiap _element selector_ dan kapan waktu yang tepat untuk menggunakannya.
 

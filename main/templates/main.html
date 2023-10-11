@@ -47,19 +47,19 @@
                 <form id="form" onsubmit="return false;">
                     {% csrf_token %}
                     <div class="mb-3 flex">
-                        <label for="name" class="font-bold mr-4">Name:</label>
+                        <label for="name" class="font-bold mr-4 mt-2">Name:</label>
                         <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="name" name="name">
                     </div>
                     <div class="mb-3 flex">
-                        <label for="author" class="font-bold mr-4">Author:</label>
+                        <label for="author" class="font-bold mr-4 mt-2">Author:</label>
                         <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="author" name="author">
                     </div>
                     <div class="mb-3 flex">
-                        <label for="category" class="font-bold mr-4">Category:</label>
+                        <label for="category" class="font-bold mr-4 mt-2">Category:</label>
                         <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="category" name="category">
                     </div>
                     <div class="mb-3 flex">
-                        <label for="amount" class="font-bold mr-4">Amount:</label>
+                        <label for="amount" class="font-bold mr-4 mt-2">Amount:</label>
                         <input type="number" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="amount" name="amount">
                     </div>
                     <div class="mb-3">
@@ -98,7 +98,7 @@
                     const isLast = index === books.length - 1;
                     totalBooks += book.fields.amount
                     htmlString += `\n
-                    <div class="bg-white ${isLast ? 'bg-blue-200' : ''} rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-white last:bg-blue-200 rounded-lg shadow-lg overflow-hidden">
                         <div class="px-6 py-4">
                             <div class="font-bold text-xl">${ book.fields.name }</div>
                             <p class="text-gray-700 text-base mb-2">by ${ book.fields.author }</p>
@@ -109,18 +109,15 @@
                             <span class="inline-block bg-blue-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">${ book.fields.category }</span>
                         </div>
                         <div class="flex space-x-2 px-6 py-4">
-                            <form action=${"{% url 'main:add_book_amount' book_id=1 %}".replace(1, book.pk.toString())} method="post">
-                                {% csrf_token %}
-                                <button type="submit" name="Increment" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Add one book</button>
-                            </form>
-                            <form action=${"{% url 'main:dec_book_amount' book_id=1 %}".replace(1, book.pk.toString())} method="post">
-                                {% csrf_token %}
-                                <button type="submit" name="Decrement" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Subtract one book</button>
-                            </form>
-                            <form action=${"{% url 'main:remove_book' book_id=1 %}".replace(1, book.pk.toString())} method="post">
-                                {% csrf_token %}
-                                <button type="submit" name="Remove" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete book(s)</button>
-                            </form>
+                            <div>
+                                <button type="submit" name="Increment" onclick="incrementBook(${book.pk})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Add one book</button>
+                            </div>
+                            <div>
+                                <button type="submit" name="Decrement" onclick="decrementBook(${book.pk})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Subtract one book</button>
+                            </div>
+                            <div>
+                                <button type="submit" name="Delete" onclick="deleteBook(${book.pk})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete book(s)</button>
+                            </div>
                         </div>
                     </div>`
                 })
@@ -169,6 +166,31 @@
         }
 
         document.getElementById("button_add").onclick = addBook
+
+        function deleteBook(book_id) {
+            fetch(`delete-ajax/${book_id}`, {
+                method: "DELETE",
+            }).then(refreshItems)
+
+            return false
+        }
+
+        function incrementBook(book_id) {
+            fetch(`add-book-amount-ajax/${book_id}`, {
+                method: "POST",
+            }).then(refreshItems)
+
+            return false
+        }
+
+        function decrementBook(book_id) {
+            fetch(`dec-book-amount-ajax/${book_id}`, {
+                method: "POST",
+            }).then(refreshItems)
+
+            return false
+        }
+        
     </script>
 
 </div>

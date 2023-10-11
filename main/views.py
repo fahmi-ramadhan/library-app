@@ -129,12 +129,33 @@ def add_item_ajax(request):
 
     return HttpResponseNotFound()
 
-# def delete_item_ajax(request):
-#     if request.method == 'POST':
-#         id = request.POST.get("id")
-#         item = Item.objects.get(id=id)
-#         item.delete()
+@csrf_exempt
+def delete_item_ajax(request, book_id):
+    if request.method == 'DELETE':
+        book = Item.objects.get(pk=book_id, user=request.user)
+        book.delete()
+        return HttpResponse(b"OK", status=200)
 
-#         return HttpResponse(b"OK", status=200)
+    return HttpResponseNotFound()
 
-#     return HttpResponseNotFound()
+@csrf_exempt
+def add_book_amount_ajax(request, book_id):
+    if request.method == 'POST':
+        book = Item.objects.get(pk=book_id, user=request.user)
+        book.amount += 1
+        book.save()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def dec_book_amount_ajax(request, book_id):
+    if request.method == 'POST':
+        book = Item.objects.get(pk=book_id, user=request.user)
+        book.amount -= 1
+        if book.amount < 0:
+            book.amount = 0
+        book.save()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
