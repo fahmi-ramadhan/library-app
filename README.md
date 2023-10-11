@@ -6,10 +6,577 @@ Nama: Fahmi Ramadhan<br>
 NPM: 2206026473<br>
 Kelas: PBP A<br>
 
+# Tugas 6: JavaScript dan Asynchronous JavaScript
+
+<details open>
+
+## Perbedaan antara _asynchronous programming_ dengan _synchronous programming_.
+
+## Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
+
+## Jelaskan penerapan asynchronous programming pada AJAX.
+
+## Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
+
+## Implementasi _Checklist_
+
+### 1. Membuat sebuah tombol yang membuka sebuah modal dengan _form_ untuk menambahkan buku.
+
+### 2. Membuat fungsi _view_ baru untuk menambahkan buku ke dalam basis data.
+
+### 3. Membuat path `/create-ajax/` yang mengarah ke fungsi _view_.
+
+### 4. Melakukan perintah `collectstatic`.
+
+</details>
+
+# Tugas 5: Desain Web Menggunakan HTML, CSS dan FrameWork CSS
+
+<details>
+
+## Manfaat dari setiap _element selector_ dan kapan waktu yang tepat untuk menggunakannya.
+
+- _Universal Selector_ digunakan untuk memilih semua elemen HTML pada halaman. _selector_ ini cocok digunakan ketika ingin _reset style_ atau ketika ingin memberikan _style_ umum pada semua elemen dalam halaman, misalnya mengatur jenis _font_ (`* {}`).
+
+- _Element Selector_ digunakan untuk memilih semua elemen HTML dengan nama elemen tertentu (misalnya, semua `<p>`). _Selector_ ini cocok digunakan ketika ingin memberikan _style_ umum pada semua elemen dengan jenis tertentu. (`p {}`).
+
+- _Class Selector_ digunakan untuk memilih elemen berdasarkan atribut `class` yang diberikan. Dikarenakan beberapa elemen bisa memiliki `class` yang sama dengan elemen lainnya, kita bisa mengelompokkan elemen-elemen tersebut dalam kelas-kelas tertentu. Oleh karena itu, _selector_ ini cocok digunakan ketika ingin memberikan _style_ pada kelompok elemen dengan class tertentu yang sama (`.nama-class {}`).
+
+- _ID Selector_ digunakan untuk memilih elemen berdasarkan atribut `id` yang diberikan. Berbeda dengan `class`, atribut `id` bersifat unik untuk setiap elemen dalam satu file `html`. Oleh karena itu, _selector_ ini cocok digunakan ketika ingin memberikan _style_ atau manipulasi spesifik pada elemen tertentu dengan ID yang unik (`.value-id {}`).
+
+- _Descendant Selector_ digunakan untuk memilih elemen dalam hierarki tertentu. _Selector_ ini cocok digunakan ketika ingin memberikan _style_ pada semua elemen tertentu yang berada di dalam elemen tertentu, misalnya semua elemen `<li>` dalam elemen `<ul>` (`ul li {}`). 
+
+- _Adjacent Selector_ digunakan untuk memilih suatu elemen yang bersebelahan dalam tingkat hierarki yang sama. _Selector_ ini cocok digunakan ketika ingin memberikan _style_ suatu elemen yang tepat didahului oleh suatu elemen tertentu, misalnya elemen `<p>` yang tepat setelah elemen `<h1>` (`h1 + p {}`).
+
+- _Direct-Descendant Selector_ digunakan untuk memilih suatu elemen yang berada dalam elemen tertentu dan hanya berbeda satu tingkat hierarki. _Selector_ ini cocok digunakan ketika ingin memberikan _style_ misalnya pada elemen `<li>` yang berada satu tingkat di dalam elemen `<ul>` (`ul > li {}`).
+
+- _Attribute Selector_ digunakan untuk memilih semua elemen yang atributnya diset memiliki nilai yang sama. Selector_ ini cocok digunakan ketika ingin memberikan _style_ misalnya pada elemen `input` yang atribut `type`-nya diset ke `"text"` (`input[type="text"] {}`).
+
+## Penjelasan HTML5 Tag
+
+- `<nav>`: Tag ini adalah sebuah _semantic tag_ yang digunakan untuk menentukan bagian navigasi pada halaman web yang biasanya terdapat pada bagian atas halaman web dan berisikan tautan menuju halaman lain pada web tersebut.
+- `<table>`, `<tr>`, `<th>`, dan `<td>`: Tag ini digunakan untuk membuat tabel dan mengatur elemen-elemen dalam tabel. `<tr>` untuk _table row_, `<th>` untuk _table header_, dan `<td>` untuk _table data_.
+- `<title>`: Tag ini digunakan untuk menentukan judul halaman web yang akan ditampilkan pada _tab_ judul _browser_.
+- `<a>`: Tag ini digunakan untuk membuat tautan atau _hyperlink_ ke halaman web atau sumber daya lainnya. Tag ini memiliki atribut paling penting yaitu `href` yang digunakan untuk menentukan alamat URL yang akan dituju saat tautan diklik.
+- `<div>`: Tag ini adalah sebuah _semantic tag_ yang digunakan untuk mengelompokkan dan mengatur elemen-elemen HTML menjadi blok-blok konten. ini adalah elemen "divisi" yang umum digunakan untuk membuat wadah yang dapat diatur dan diberi _style_ dengan CSS.
+
+## Perbedaan antara _margin_ dan _padding_
+
+### 1. _Margin_
+- _Margin_ adalah area di luar batas elemen HTML yang memisahkan elemen tersebut dari elemen-elemen lain di sekitarnya.
+- Ketika mengatur _margin_ suatu elemen, jarak antara elemen tersebut dengan elemen-elemen lain di sekitarnya akan berubah.
+
+### 2. _Padding_
+- _Padding_ adalah area yang terletak di dalam elemen, di antara batas elemen dan kontennya sendiri.
+- Ketika mengatur padding suatu elemen, yang diubah adalah seberapa jauh konten elemen tersebut dari batas elemen tersebut, sehingga tidak memengaruhi elemen-elemen lain di sekitarnya.
+
+## Perbedaan antara _framework_ CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya?
+
+### 1. Tailwind CSS
+- Tailwind CSS mengikuti pendekatan "_utility-first_", yang berarti _framework_ ini memberikan sejumlah besar kelas utilitas yang dapat ditambahkan langsung ke elemen HTML untuk merancang tampilan.
+- Tailwind CSS memiliki _file_ CSS yang lebih kecil sedikit dibandingkan Bootstrap serta hanya akan memuat kelas-kelas utilitas yang ada.
+- Tailwind CSS memberikan fleksibilitas dan adaptabilitas yang tinggi terhadap proyek.
+- Tailwind CSS memerlukan pengetahuan CSS yang lebih dalam karena kita akan bekerja dengan banyak kelas utilitas untuk merancang tampilan.
+
+### 2. Bootstrap
+- Bootstrap memiliki desain yang lebih "_opinionated_". Ini berarti bahwa Bootstrap memiliki komponen-komponen yang telah dirancang dan ditata dengan baik, sehingga memungkinkan kita untuk membangun tampilan dengan cepat tanpa banyak penyesuaian.
+- Bootstrap cenderung memiliki ukuran _file_ yang lebih besar karena menyediakan banyak komponen dan _style_ yang sudah jadi.
+- Bootstrap sering kali menghasilkan tampilan yang lebih konsisten di seluruh proyek karena menggunakan komponen yang telah didefinisikan.
+- Bootstrap lebih mudah dipelajari oleh pemula atau mereka yang tidak memiliki pengetahuan CSS yang mendalam karena komponen-komponennya telah dirancang dan ditata dengan baik.
+
+Kita dapat menggunakan Bootstrap ketika kita ingin membuat tampilan dengan cepat dan mudah, terutama jika kita tidak memiliki banyak pengalaman dalam desain tampilan atau CSS. Sementara itu, kita dapat menggunakan Tailwind CSS ketika kita ingin membuat tampilan dengan mudah dan cepat tetapi juga masih fleksibel sehingga desain tidak monoton.
+
+## Implementasi _Checklist_
+
+### Kustomisasi desain pada template HTML yang telah dibuat pada Tugas 4 dengan menggunakan CSS _framework_ Tailwind
+
+Pertama-tama, saya menambahkan `<script src="https://cdn.tailwindcss.com"></script>` pada `base.html` agar dapat menggunakan Tailwind CSS. Kemudian, saya menambahkan atribut `class="bg-blue-100"` pada elemen _body_ di `base.html` agar semua halaman memiliki warna latar belakang yang sama.
+
+### 1. Kustomisasi halaman `login`, `register`, dan `add_book`
+
+#### a. Halaman `login`
+
+- Memindahkan konten halaman login ke tengah halaman.
+```html
+<div class="flex justify-center items-center h-screen">
+```
+- Menambahkan background, padding, rounded corner, dan box shadow serta mengatur lebarnya menjadi full untuk layar kecil, 1/2 untuk layar medium, dan 1/3 untuk layar besar.
+```html
+<div class = "login bg-blue-50 p-8 rounded shadow-md w-full md:w-1/2 lg:w-1/3">
+```
+- Mengatur header "Login" agar memiliki font size 2xl, bold weight, serta menambahkan bottom margin.
+```html
+<h1 class="text-2xl font-bold mb-4">Login</h1>
+```
+- Pada _form_, saya mengubah tabel menjadi beberapa elemen `div` untuk _field_ _username_ dan _password_ serta tombol _login_ serta mengatur _style_-nya seperti berikut.
+```html
+<form method="POST" action="">
+    {% csrf_token %}
+    <div class="mb-4">
+        <label class="block font-bold mb-2" for="username">
+            Username:
+        </label>
+        <input type="text" name="username" placeholder="Username" class="form-control w-full" id="username">
+    </div>
+    <div class="mb-4">
+        <label class="block font-bold mb-2" for="password">
+            Password:
+        </label>
+        <input type="password" name="password" placeholder="Password" class="form-control w-full" id="password">
+    </div>
+    <div class="flex justify-end">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+            Login
+        </button>
+    </div>
+</form>
+```
+- Menambahkan margin top pada daftar _messages_ dan pada teks "Don't have an account yet?" serta "Register Now"
+```html
+{% if messages %}
+    <ul class="mt-4">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}     
+    
+<p class="mt-4">Don't have an account yet? <a href="{% url 'main:register' %}" class="text-blue-500">Register Now</a></p>
+```
+
+#### b. Halaman `Register`
+
+- Sama seperti halaman _login_, saya memindahkan konten halaman register ke tengah halaman.
+```html
+<div class="flex justify-center items-center h-screen">
+```
+- Menambahkan background, padding, rounded corner, dan box shadow serta mengatur lebarnya menjadi full untuk layar kecil dan 1/2 untuk layar medium atau lebih besar.
+```html
+<div class = "register bg-blue-50 p-8 rounded shadow-md w-full md:w-1/2">
+```
+- Mengatur header "Register" agar memiliki font size 2xl, bold weight, serta menambahkan bottom margin.
+```html
+<h1 class="text-2xl font-bold mb-4">Register</h1>
+```
+- Mengubah _form_ dan menambahkan _style_ menjadi seperti berikut:
+```html
+<form method="POST" >  
+    {% csrf_token %}  
+    <table class="w-full mb-4">  
+        {{ form.as_table }}
+    </table>
+    <div class="flex justify-end">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+            Register
+        </button>
+    </div>
+</form>
+```
+- Menambahkan margin top pada daftar _messages_ seperti pada halaman _login_.
+
+#### c. Halaman `add_book`
+
+- Masih sama seperti sebelumnya, saya memindahkan konten halaman add_book ke tengah halaman.
+```html
+<div class="flex justify-center items-center h-screen">
+```
+- Menambahkan background, padding, rounded corner, dan box shadow serta mengatur lebarnya menjadi full untuk layar kecil dan 1/3 untuk layar medium atau lebih besar.
+```html
+<div class = "add_book bg-blue-50 p-8 rounded shadow-md w-full md:w-1/3">
+```
+- Mengatur header "Add New Book" agar memiliki font size 2xl, bold weight, serta menambahkan bottom margin.
+```html
+<h1 class="text-2xl font-bold mb-4">Add New Book</h1>
+```
+- Mengubah _form_ dan menambahkan _style_ menjadi seperti berikut:
+```html
+<form method="POST">
+    {% csrf_token %}
+    <table class="w-full mb-4">
+        {{ form.as_table }}
+    </table>
+    <div class="flex justify-end">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+            Add Book
+        </button>
+    </div>
+</form>
+```
+
+### 2. Kustomisasi halaman daftar buku
+
+- Membuat _fixed header_ yang berisikan nama aplikasi dan tombol untuk menambahkan buku.
+```html
+<header class="bg-blue-500 shadow fixed w-full z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex-shrink-0 flex items-center">
+                <h1 class="text-white font-bold text-2xl">{{ app_name }}</h1>
+            </div>
+            <div class="flex items-center justify-end">
+                <a href="{% url 'main:add_book' %}">
+                    <button class="bg-blue-100 hover:bg-blue-700 hover:text-white text-blue-500 font-bold py-2 px-4 rounded">
+                        Add New Book
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+```
+- Membungkus isi konten halaman dalam container dan mengaturnya agar berada di tengah halaman.
+```html
+<div class="flex justify-center">
+    <div class="container mt-20">
+        ...
+    </div>
+</div>
+```
+- Memindahkan tombol _log out_ agar berada di samping nama _user_ yang sedang _login_ serta memberikannya _style_ dan juga memindahkan informasi sesi _login_ terakhir ke bagian atas.
+```html
+<div class="flex mt-4">
+    <h5 class="mt-1 mr-2">logged in as: <span class="font-bold">{{name}}</span></h5>
+    <a href="{% url 'main:logout' %}">
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded" type="submit">
+            Logout
+        </button>
+    </a>
+</div>
+
+<h5 class="mt-2">Last login session: {{ last_login }}</h5>
+```
+- Menambahkan blok `{% if books|length != 0  %}` sebelum menampilkan total buku dan tabel agar ketika tidak ada buku, _header_ tabel tidak ditampilkan. Kemudian, ditambahkan pesan tidak ada buku pada blok `else`-nya.
+- Menambahkan `class="px-4 py-2 font-bold border-t border-b border-blue-500"` pada setiap _header_ tabel.
+- Menambahkan `class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}"` untuk setiap informasi buku pada tabel. Teks akan berwarna biru jika itu buku tersebut merupakan buku paling terakhir dalam daftar buku **(BONUS)**.
+- Menambahkan atribut `title` pada tombol-tombol untuk _increment_ buku, _decrement_ buku, dan _remove_ buku sebagai _tooltip_ yang akan muncul ketika tombol di-_hover_.
+
+</details>
+
+# Tugas 4: Implementasi Autentikasi, Session, dan Cookies pada Django
+
+<details>
+
+## Apa itu Django `UserCreationForm` dan apa kelebihan dan kekurangannya?
+
+`UserCreationForm` adalah salah satu form yang disediakan oleh _framework_ Django untuk mempermudah proses pembuatan _user_ dalam aplikasi web. Dengan adanya hal tersebut, kita tidak perlu susah-susah menulis kode dari awal untuk membuat _form_ dan validasi inputnya sehingga kita dapat menghemat waktu. Namun, `UserCreationForm` juga memiliki kekurangan karena bentuknya yang sederhana. Jika kita ingin menambahkan fitur yang kompleks, misalnya konfirmasi email atau CAPTCHA, kita harus menulis kode sendiri. 
+
+## Apa perbedaan autentikasi dan otorisasi dalam konteks Django dan mengapa keduanya penting?
+
+Autentikasi adalah proses untuk memverifikasi identitas pengguna yang mengakses suatu aplikasi, misalnya proses login dalam aplikasi web. Pada Django, terdapat method `authenticate` yang digunakan untuk mengautentikasi _username_ dengan _password_-nya. Sementara itu, otorisasi adalah proses untuk memverifikasi apakah pengguna yang sudah terautentikasi memiliki akses pada suatu fitur dalam aplikasi web tersebut. Misalnya, pada scele, pengguna terautentikasi yang memiliki role dosen memiliki hak akses yang berbeda dengan pengguna terautentikasi yang memiliki role mahasiswa.
+
+Autentikasi dan otorisasi merupakan hal penting untuk diimplementasikan pada suatu aplikasi web. Dengan menggabungkan keduanya, kita bisa membuat aplikasi web yang aman dengan kontrol yang tepat atas siapa saja yang dapat melakukan hal tertentu.
+
+## Apa itu _cookies_ dalam konteks aplikasi web dan bagaimana Django menggunakan cookies untuk mengelola data sesi pengguna?
+
+_Cookies_ adalah sebuah potongan kecil dari data yang disimpan di sisi klien, yaitu _web browser_ dari pengguna, agar data tersebut dapat digunakan kembali dalam _request_ selanjutnya. _Cookies_ biasa digunakan dalam menyimpan token autentikasi, melacak aktivitas pengguna, dan menyimpan preferensi pengguna. _Cookies_ akan dihapus secara otomatis jika sudah mencapai waktu kedaluwarsanya. 
+
+Django memiliki dukungan bawaan untuk mengelola data sesi pengguna. Django menyediakan API untuk membaca nilai _cookies_ dari HTTP _request_ yang diterima _browser_ pengguna dan kita bisa mengakses _value_ dari _dictionary_ `request.COOKIES`. Untuk mengatur atau membuat _cookies_ baru, kita bisa menggunakan `response.set_cookie()`. Kemudian, untuk penghapusan _cookies_ bisa menggunakan `response.delete_cookie()` 
+
+## Apakah penggunaan cookies aman secara _default_ dalam pengembangan web atau apakah ada risiko potensial yang harus diwaspadai?
+
+_Cookies_ bersifat aman karena ia hanya menyimpan data, bukan kode program, tidak dapat membaca atau menghapus data pada komputer pengguna. Namun, jika _cookies_ tidak diatur dengan baik, misalnya terdapat informasi personal di dalamnya, ada risiko data tersebut dicuri oleh suatu _script_, bukan _cookies_-nya yang mencuri.
+
+## Implementasi _Checklist_
+
+### 1. Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
+
+Pertama-tama, saya membuka file `views.py` pada subdirektori `main` lalu mengimport _method-method_ yang dibutuhkan dan menambahkan fungsi `register`, `login`, dan `logout` berikut:
+
+```python
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('main:show_main')
+        else:
+            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('main:login')
+```
+
+Setelah itu, pada direktori `main/templates`, saya membuat berkas `register.html` dan `login.html` yang meng-_extends_ `base.html`.
+
+1. `register.html`
+```html
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Register</title>
+{% endblock meta %}
+
+{% block content %}  
+
+<div class = "login">
+    
+    <h1>Register</h1>  
+
+        <form method="POST" >  
+            {% csrf_token %}  
+            <table>  
+                {{ form.as_table }}  
+                <tr>  
+                    <td></td>
+                    <td><input type="submit" name="submit" value="Daftar"/></td>  
+                </tr>  
+            </table>  
+        </form>
+
+    {% if messages %}  
+        <ul>   
+            {% for message in messages %}  
+                <li>{{ message }}</li>  
+                {% endfor %}  
+        </ul>   
+    {% endif %}
+
+</div>  
+
+{% endblock content %}
+```
+
+2. `login.html`
+```html
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+
+<div class = "login">
+
+    <h1>Login</h1>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Username: </td>
+                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+            </tr>
+                    
+            <tr>
+                <td>Password: </td>
+                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><input class="btn login_btn" type="submit" value="Login"></td>
+            </tr>
+        </table>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}     
+        
+    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+
+</div>
+
+{% endblock content %}
+```
+
+Selanjutnya, saya menambahkan _path_ url ke dalam `urlpatterns` pada `urls.py` di subdirektori `main` untuk mengakses fungsi `register`, `login`, dan `logout` tadi.
+
+```python
+urlpatterns = [
+    ...
+    path('register/', register, name='register'),
+    path('login/', login_user, name='login'),
+    path('logout/', logout_user, name='logout'),
+]
+```
+
+Kemudian, saya melakukan restriksi akses halaman main agar hanya bisa diakses oleh pengguna yang sudah login (terautentikasi) dengan menambahkan kode `@login_required(login_url='/login')` di atas fungsi `show_main`
+
+### 2. Membuat dua akun pengguna dengan masing-masing tiga _dummy_ data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+
+Saat ini, kedua akun tersebut akan terhubung ke data yang sama. Oleh karena itu, selanjutnya saya akan menghubungkan model `Item` dengan `User` agar masing-masing _user_ hanya melihat item-item yang telah ia buat sendiri. 
+
+### 3. Menghubungkan model `Item` dengan `User`.
+
+Untuk menghubungkan model `Item` dengan `User`, saya menambahkan _field_ baru bernama `user` pada model.
+
+```python
+from django.contrib.auth.models import User
+
+class Item(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ...
+```
+
+Selanjutnya, saya mengubah fungsi `show_main` dan `add_book` pada `views.py` menjadi sebagai berikut:
+
+```python
+...
+def show_main(request):
+    books = Item.objects.filter(user=request.user)
+    ...
+    context = {
+        ...
+        'name': request.user.username,
+        ...
+    }
+    ...
+
+def add_book(request):
+    form = ItemForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        item = form.save(commit=False)
+        item.user = request.user
+        item.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    ...
+```
+
+Karena terdapat perubahan pada _models_, saya perlu melakukan migrasi dengan menjalankan `python manage.py makemigrations` lalu `python manage.py migrate`.
+
+### 4. Menampilkan detail informasi pengguna yang sedang _logged in_ seperti _username_ dan menerapkan `cookies` seperti `last login` pada halaman utama aplikasi.
+
+Pada tahap ini, saya menerapkan _cookies_ yang bernama `last_login` untuk melihat kapan terakhir kali suatu _user_ melakukan _login_. Untuk itu, saya mengubah fungsi `login_user` agar men-_set_ _cookies_ dengan _key_ `last_login` dengan _value_ waktu sekarang. Selain itu, saya juga mengubah fungsi `logout_user` agar menghapus _cookies_ dengan _key_ `last_login` saat _user_ melakukan _logout_.
+
+```python
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_main")) 
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+        else:
+            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+```
+
+Kemudian, untuk menampilkan data _last login_ ke halaman _main_, saya menambahkan sebuah data pada _dictionary_ `context` di fungsi `show_main` dan menambahkan sebaris kode pada `main.html`
+
+```python
+context = {
+    ...
+    'last_login': request.COOKIES['last_login'],
+}
+```
+
+```html
+...
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+...
+```
+
+## BONUS
+
+Saya menambahkan fungsi `add_book_amount`, `dec_book_amount`, dan `remove_book` pada `views.py`.
+
+```python
+def remove_book(request, book_id):
+    if request.method == 'POST' and 'Remove' in request.POST:
+        book = Item.objects.get(id=book_id)
+        book.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def add_book_amount(request, book_id):
+    if request.method == 'POST' and 'Increment' in request.POST:
+        book = Item.objects.get(id=book_id)
+        book.amount += 1
+        book.save()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def dec_book_amount(request, book_id):
+    if request.method == 'POST' and 'Decrement' in request.POST:
+        book = Item.objects.get(id=book_id)
+        book.amount -= 1
+        book.save()
+    return HttpResponseRedirect(reverse('main:show_main'))
+```
+
+Selanjutnya, saya menambahkan _path_ url ke dalam `urlpatterns` pada `urls.py` di subdirektori `main` untuk mengakses fungsi-fungsi tersebut.
+
+```python
+urlpatterns = [
+    ...
+    path('add_book_amount/<int:book_id>/', add_book_amount, name='add_book_amount'),
+    path('dec_book_amount/<int:book_id>/', dec_book_amount, name='dec_book_amount'),
+    path('remove_book/<int:book_id>/', remove_book, name='remove_book'),
+]
+```
+
+Kemudian, saya menambahkan tombol pada tabel di `main.html` untuk melakukan fungsi-fungsi di atas.
+
+```html
+<table>
+    <tr>
+        ...
+        <th colspan="3">Actions</th>
+    </tr>
+
+    {% for book in books %}
+        <tr>
+            ...
+            <td>
+                <form action="{% url 'main:add_book_amount' book.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">➕</button>
+                </form>
+            </td>
+            <td>
+                <form action="{% url 'main:dec_book_amount' book.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">➖</button>
+                </form>
+            </td>
+            <td>
+                <form action="{% url 'main:remove_book' book.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Remove">❌</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+```
+
+</details>
 
 # Tugas 3: Implementasi _Form_ dan _Data Delivery_ pada Django
 
-<details open>
+<details>
 
 ## Perbedaan _form_ `POST` dan _form_ `GET` dalam Django
 

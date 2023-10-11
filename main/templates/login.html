@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+
+<div class="flex justify-center items-center h-screen">
+    
+    <div class = "login bg-white p-8 rounded shadow-md w-full md:w-1/2 lg:w-1/3">
+
+        <h1 class="text-2xl font-bold mb-4">Login</h1>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block font-bold mb-2" for="username">
+                    Username:
+                </label>
+                <input type="text" name="username" placeholder="Username" class="form-control w-full rounded-md shadow-md px-1 border-gray-500 border" id="username">
+            </div>
+            <div class="mb-4">
+                <label class="block font-bold mb-2" for="password">
+                    Password:
+                </label>
+                <input type="password" name="password" placeholder="Password" class="form-control w-full rounded-md shadow-md px-1 border-gray-500 border" id="password">
+            </div>
+            <div class="flex justify-end">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+                    Login
+                </button>
+            </div>
+        </form>
+
+        {% if messages %}
+            <ul class="mt-4">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}     
+            
+        <p class="mt-4">Don't have an account yet? <a href="{% url 'main:register' %}" class="text-blue-500">Register Now</a></p>
+
+    </div>
+
+</div>
+
+{% endblock content %}
