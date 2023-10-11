@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseNotFound, HttpResponseRedirect, HttpResponse
 from main.forms import ItemForm
 from django.urls import reverse
 from main.models import Item
@@ -8,21 +8,18 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 import datetime
 
 @login_required(login_url='/login')
 def show_main(request):
     books = Item.objects.filter(user=request.user)
-    total_books = 0
-    for book in books:
-        total_books += book.amount
 
     context = {
         'app_name': 'Library Management System',
         'name': request.user.username,
         'class': 'PBP A',
         'books': books,
-        'total_books': total_books,
         'last_login': request.COOKIES['last_login'],
     }
 
@@ -90,6 +87,8 @@ def dec_book_amount(request, book_id):
     if request.method == 'POST' and 'Decrement' in request.POST:
         book = Item.objects.get(id=book_id)
         book.amount -= 1
+        if book.amount < 0:
+            book.amount = 0
         book.save()
     return HttpResponseRedirect(reverse('main:show_main'))
 
@@ -108,3 +107,34 @@ def show_xml_by_id(request, id):
 def show_json_by_id(request, id):
     data = Item.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def get_item_json(request):
+    books = Item.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', books))
+
+@csrf_exempt
+def add_item_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        author = request.POST.get("author")
+        category = request.POST.get("category")
+        amount = request.POST.get("amount")
+        description = request.POST.get("description")
+        user = request.user
+
+        new_book = Item(name=name, author=author, category=category, amount=amount, description=description, user=user)
+        new_book.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+
+# def delete_item_ajax(request):
+#     if request.method == 'POST':
+#         id = request.POST.get("id")
+#         item = Item.objects.get(id=id)
+#         item.delete()
+
+#         return HttpResponse(b"OK", status=200)
+
+#     return HttpResponseNotFound()

@@ -8,29 +8,60 @@
 
 <div class="flex justify-center items-center h-screen">
 
-    <div class = "register bg-blue-50 p-8 rounded shadow-md w-full md:w-1/2">
+    <div class = "register bg-white p-8 rounded shadow-md w-full md:w-1/2">
         
         <h1 class="text-2xl font-bold mb-4">Register</h1>  
 
-            <form method="POST" >  
-                {% csrf_token %}  
-                <table class="w-full mb-4">  
-                    {{ form.as_table }}
-                </table>
-                <div class="flex justify-end">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
-                        Register
-                    </button>
-                </div>
-            </form>
+        <form method="POST" >  
+            {% csrf_token %}  
+            <div class="mb-4">
+                <label class="block font-bold mb-2" for="username">
+                    Username:
+                </label>
+                <input type="text" name="username" placeholder="Username" maxlength="150" autocapitalize="none" autocomplete="username" class="form-control w-full rounded-md shadow-md px-1 border-gray-500 border" autofocus required id="username">
+                <br>
+                <span class="helptext text-xs">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span>
+            </div>
+            <div class="mb-4">
+                <label class="block font-bold mb-2" for="password1">
+                    Password:
+                </label>
+                <input type="password" name="password1" placeholder="Password" autocomplete="new-password" class="form-control w-full rounded-md shadow-md px-1 border-gray-500 border" required id="password1">
+                <br>
+                <span class="helptext text-xs">
+                    <ul class="list-disc pl-6 pt-1">
+                        <li>Your password can't be too similar to your other personal information.</li>
+                        <li>Your password must contain at least 8 characters.</li>
+                        <li>Your password can't be a commonly used password.</li>
+                        <li>Your password can't be entirely numeric.</li>
+                    </ul>
+                </span>
+            </div>
+            <div class="mb-4">
+                <label class="block font-bold mb-2" for="password2">
+                    Password confirmation:
+                </label>
+                <input type="password" name="password2" placeholder="Password" autocomplete="new-password" class="form-control w-full rounded-md shadow-md px-1 border-gray-500 border" required id="password2">
+                <br>
+                <span class="helptext text-xs">Enter the same password as before, for verification.</span>
+            </div>
+            <div class="flex justify-end">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+                    Register
+                </button>
+            </div>
 
-        {% if messages %}  
-            <ul class="mt-4">   
-                {% for message in messages %}  
-                    <li>{{ message }}</li>  
-                    {% endfor %}  
-            </ul>   
-        {% endif %}
+            {% if form.errors %}
+                <ul class="pt-2">
+                    {% for _,error in form.errors.items %} 
+                    <li class="text-red-500 text-sm">{{ error }}</li>
+                    {% endfor %}
+                    <li class="text-red-500 text-sm">Please try again.</li>
+                </ul>
+            {% endif %}
+        </form>
+
+        <p class="mt-4">Already have an account? <a href="{% url 'main:login' %}" class="text-blue-500">Login Now</a></p>
 
     </div>
 

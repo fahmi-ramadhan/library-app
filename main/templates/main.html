@@ -9,11 +9,9 @@
                 <h1 class="text-white font-bold text-2xl">{{ app_name }}</h1>
             </div>
             <div class="flex items-center justify-end">
-                <a href="{% url 'main:add_book' %}">
-                    <button class="bg-blue-100 hover:bg-blue-700 hover:text-white text-blue-500 font-bold py-2 px-4 rounded">
-                        Add New Book
-                    </button>
-                </a>
+                <button id="open" class="bg-blue-100 hover:bg-blue-700 hover:text-white text-blue-500 font-bold py-2 px-4 rounded">
+                    Add New Book
+                </button>
             </div>
         </div>
     </div>
@@ -34,55 +32,144 @@
 
         <h5 class="mt-2">Last login session: {{ last_login }}</h5>
 
-        {% if books|length != 0  %}
-        <h5 class="mr-2 mt-4">There are currently 
-            <span class="font-bold">{{total_books}}</span> books with
-            <span class="font-bold">{{books|length}}</span> book titles stored in the system
-        </h5>
-        
-        <table class="mt-4">
-            <tr>
-                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">NAME</th>
-                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">AUTHOR</th>
-                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">CATEGORY</th>
-                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">AMOUNT</th>
-                <th class="px-4 py-2 font-bold border-t border-b border-blue-500">DESCRIPTION</th>
-                <th class="px-4 py-2 font-bold border-t border-b border-blue-500" colspan="3">ACTIONS</th>
-            </tr>
+        <h5 class="mr-2 mt-4" id="book_count"></h5>
 
-            {% for book in books %}
-                <tr>
-                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.name}}</td>
-                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.author}}</td>
-                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.category}}</td>
-                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.amount}}</td>
-                    <td class="px-4 py-2 border-b border-blue-500 {% if forloop.last %}text-blue-500{% endif %}">{{book.description}}</td>
-                    <td class="px-4 py-2 border-b border-blue-500">
-                        <form action="{% url 'main:add_book_amount' book.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" name="Increment" title="Add One Book">➕</button>
-                        </form>
-                    </td>
-                    <td class="px-4 py-2 border-b border-blue-500">
-                        <form action="{% url 'main:dec_book_amount' book.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" name="Decrement" title="Remove One Book">➖</button>
-                        </form>
-                    </td>
-                    <td class="px-4 py-2 border-b border-blue-500">
-                        <form action="{% url 'main:remove_book' book.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" name="Remove" title="Remove Books">❌</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-        {% else %}
-            <h5 class="mt-4 font-bold text-xl">There are no books stored in the system for this account</h5>
-        {% endif %}
+        <div class="grid grid-cols-1 gap-4 mt-4" id="books_card"></div>
+
+        <!-- Overlay element -->
+        <div id="overlay" class="fixed hidden z-40 w-screen h-screen inset-0 bg-gray-900 bg-opacity-60"></div>
+
+        <!-- The dialog -->
+        <div id="dialog"
+            class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
+            <h1 class="text-2xl font-bold">Add New Book</h1>
+            <div class="py-5 border-t border-b border-blue-500">
+                <form id="form" onsubmit="return false;">
+                    {% csrf_token %}
+                    <div class="mb-3 flex">
+                        <label for="name" class="font-bold mr-4">Name:</label>
+                        <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="name" name="name">
+                    </div>
+                    <div class="mb-3 flex">
+                        <label for="author" class="font-bold mr-4">Author:</label>
+                        <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="author" name="author">
+                    </div>
+                    <div class="mb-3 flex">
+                        <label for="category" class="font-bold mr-4">Category:</label>
+                        <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="category" name="category">
+                    </div>
+                    <div class="mb-3 flex">
+                        <label for="amount" class="font-bold mr-4">Amount:</label>
+                        <input type="number" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="amount" name="amount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="font-bold">Description:</label>
+                        <textarea class="form-control mt-2 block w-full px-1 rounded-md shadow-sm border-gray-500 border" id="description" name="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="flex justify-end">
+                <!-- This button is used to close the dialog -->
+                <button type="button" id="close" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
+                    Close
+                </button>
+                <!-- This button is used to submit the form -->
+                <button type="button" id="button_add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Add Book
+                </button>
+            </div>
+        </div>
 
     </div>
+
+    <script>
+        async function getItems() {
+            return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
+        }
+
+        async function refreshItems() {
+            document.getElementById("books_card").innerHTML = ""
+            const books = await getItems()
+
+            if (books.length != 0) { 
+                let htmlString = ""
+                let totalBooks = 0
+                books.forEach((book, index) => {
+                    const isLast = index === books.length - 1;
+                    totalBooks += book.fields.amount
+                    htmlString += `\n
+                    <div class="bg-white ${isLast ? 'bg-blue-200' : ''} rounded-lg shadow-lg overflow-hidden">
+                        <div class="px-6 py-4">
+                            <div class="font-bold text-xl">${ book.fields.name }</div>
+                            <p class="text-gray-700 text-base mb-2">by ${ book.fields.author }</p>
+                            <p class="text-gray-700 text-base">${ book.fields.description }</p>
+                        </div>
+                        <div class="px-6">
+                            <span class="inline-block bg-blue-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Amount: ${ book.fields.amount }</span>
+                            <span class="inline-block bg-blue-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">${ book.fields.category }</span>
+                        </div>
+                        <div class="flex space-x-2 px-6 py-4">
+                            <form action=${"{% url 'main:add_book_amount' book_id=1 %}".replace(1, book.pk.toString())} method="post">
+                                {% csrf_token %}
+                                <button type="submit" name="Increment" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Add one book</button>
+                            </form>
+                            <form action=${"{% url 'main:dec_book_amount' book_id=1 %}".replace(1, book.pk.toString())} method="post">
+                                {% csrf_token %}
+                                <button type="submit" name="Decrement" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Subtract one book</button>
+                            </form>
+                            <form action=${"{% url 'main:remove_book' book_id=1 %}".replace(1, book.pk.toString())} method="post">
+                                {% csrf_token %}
+                                <button type="submit" name="Remove" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete book(s)</button>
+                            </form>
+                        </div>
+                    </div>`
+                })
+
+                document.getElementById("book_count").innerHTML = `There are currently 
+                <span class="font-bold">${totalBooks}</span> book(s) with
+                <span class="font-bold">${books.length}</span> book title(s) stored in the system`
+                document.getElementById("books_card").innerHTML = htmlString
+            } 
+            else {
+                document.getElementById("book_count").innerHTML = `<h5 class="font-bold text-xl">
+                There are no books stored in the system for this account</h5>`
+            }  
+        }
+
+        refreshItems()
+
+        var openButton = document.getElementById('open')
+        var dialog = document.getElementById('dialog')
+        var closeButton = document.getElementById('close')
+        var overlay = document.getElementById('overlay')
+
+        // show the overlay and the dialog
+        openButton.addEventListener('click', function () {
+            dialog.classList.remove('hidden')
+            overlay.classList.remove('hidden')
+        });
+
+        // hide the overlay and the dialog
+        closeButton.addEventListener('click', function () {
+            dialog.classList.add('hidden')
+            overlay.classList.add('hidden')
+        });
+
+        function addBook() {
+            fetch("{% url 'main:add_item_ajax' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            }).then(refreshItems)
+
+            document.getElementById("form").reset()
+            dialog.classList.add('hidden')
+            overlay.classList.add('hidden')
+
+            return false
+        }
+
+        document.getElementById("button_add").onclick = addBook
+    </script>
 
 </div>
 

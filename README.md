@@ -6,6 +6,30 @@ Nama: Fahmi Ramadhan<br>
 NPM: 2206026473<br>
 Kelas: PBP A<br>
 
+# Tugas 6: JavaScript dan Asynchronous JavaScript
+
+<details open>
+
+## Perbedaan antara _asynchronous programming_ dengan _synchronous programming_.
+
+## Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
+
+## Jelaskan penerapan asynchronous programming pada AJAX.
+
+## Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
+
+## Implementasi _Checklist_
+
+### 1. Membuat sebuah tombol yang membuka sebuah modal dengan _form_ untuk menambahkan buku.
+
+### 2. Membuat fungsi _view_ baru untuk menambahkan buku ke dalam basis data.
+
+### 3. Membuat path `/create-ajax/` yang mengarah ke fungsi _view_.
+
+### 4. Melakukan 
+
+</details>
+
 # Tugas 5: Desain Web Menggunakan HTML, CSS dan FrameWork CSS
 
 <details open>
