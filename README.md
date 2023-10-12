@@ -12,6 +12,8 @@ Kelas: PBP A<br>
 
 ## Perbedaan antara _asynchronous programming_ dengan _synchronous programming_.
 
+
+
 ## Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
 
 ## Jelaskan penerapan asynchronous programming pada AJAX.
