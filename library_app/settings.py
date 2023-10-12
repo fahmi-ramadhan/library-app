@@ -127,6 +127,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
