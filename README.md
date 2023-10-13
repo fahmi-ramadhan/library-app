@@ -12,21 +12,468 @@ Kelas: PBP A<br>
 
 ## Perbedaan antara _asynchronous programming_ dengan _synchronous programming_.
 
+Pada _synchronous programming_, program berjalan secara sekuensial atau berurutan. Artinya, operasi dieksekusi satu per satu dan menunggu hingga operasi sebelumnya selesai agar bisa melanjutkan ke operasi berikutnya.
+
+Sementara itu, pada _asynchronous programming_, program dapat berjalan secara paralel atau bersamaan. Artinya, program tidak perlu menunggu suatu operasi selesai agar dapat melanjutkan ke operasi berikutnya. Untuk mengimplementasikan _asynchronous programming_, dapat digunakan konsep seperti _callback_, _promise_, atau _async_/_await_ dalam javascript. 
+
 ## Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
 
-## Jelaskan penerapan asynchronous programming pada AJAX.
+Event-driven programming adalah sebuah paradigma di mana suatu kode dapat menunggu terjadinya suatu event/peristiwa terjadi sebelum kode tersebut dieksekusi. Contohnya, pada tugas kali ini, ada tombol untuk menambahkan buku dengan id `button_add` yang akan menjalankan fungsi `addBook` ketika terjadi event `onclick` (tombok diklik).
+
+## Jelaskan penerapan _asynchronous programming_ pada AJAX.
+
+Penerapan _asynchronous programming_ pada AJAX memungkinkan _request_ ke server dan penanganan _response_ dilakukan secara _asynchronous_. Artinya, program javascript tidak akan terhenti saat menunggu _response_ dari server. Penerapannya dapat dilakukan dengan menambahkan `async` dan `await` pada javascript. Fungsi `async` digunakan untuk menandai fungsi sebagai fungsi yang dapat mengembalikan nilai secara _asynchronous_, sedangkan fungsi `await` digunakan untuk menunggu hasil dari fungsi `async`. Berikut adalah contoh penerapannya pada tugas ini.
+```javascript
+async function getItems() {
+    return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
+}
+
+async function refreshItems() {
+    ...
+    const books = await getItems()
+    ...
+}
+```
 
 ## Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
 
+### 1. Fetch API
+- Lebih banyak didukung oleh browser modern
+- Menggunakan _fetch_ dan _response_
+- Lebih ringan karena hanya menggunakan javascript standar.
+- Menggunakan _promise_ untuk handle kode _asynchronous_.
+
+### 2. JQuery
+- Merupakan library eksternal javascript yang telah ada sejak lama dan telah digunakan secara luas di web.
+- Menggunakan callback _success_ dan _error_
+- Lebih berat karena menggunakan library eksternal.
+- Menggunakan callback untuk handle kode _asynchronous_.
+
+Menurut saya, pilihan antara Fetch API dan JQuery tergantung pada kebutuhan proyek dan preferensi pribadi. Namun secara keseluruhan, Fetch API lebih bagus untuk digunakan untuk pengembangan aplikasi web modern yang ringan karena tidak perlu menggunakan library eksternal.
+
 ## Implementasi _Checklist_
 
-### 1. Membuat sebuah tombol yang membuka sebuah modal dengan _form_ untuk menambahkan buku.
+### 1. Ubahlah kode cards data item agar dapat mendukung AJAX GET dan lakukan pengambilan item menggunakan AJAX GET.
 
-### 2. Membuat fungsi _view_ baru untuk menambahkan buku ke dalam basis data.
+Membuat fungsi _views_ baru untuk get item.
+```python
+def get_item_json(request):
+    books = Item.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', books))
+```
 
-### 3. Membuat path `/create-ajax/` yang mengarah ke fungsi _view_.
+Menambahkan path-nya ke `urls.py`
+```python
+urlpatterns = [
+    ...
+    path('get-item/', get_item_json, name='get_item_json'),
+    ...
+]
+```
 
-### 4. Melakukan perintah `collectstatic`.
+Membuat _async function_ untuk get item.
+```javascript
+async function getItems() {
+    return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
+}
+```
+
+Mengubah table menjadi cards
+```html
+<div class="grid grid-cols-1 gap-4 mt-4" id="books_card"></div>
+```
+
+Membuat _async function_ untuk refresh item.
+```javascript
+async function refreshItems() {
+    document.getElementById("books_card").innerHTML = ""
+    const books = await getItems()
+
+    if (books.length != 0) { 
+        let htmlString = ""
+        let totalBooks = 0
+        books.forEach((book, index) => {
+            const isLast = index === books.length - 1;
+            totalBooks += book.fields.amount
+            htmlString += `\n
+            <div class="bg-white last:bg-blue-200 rounded-lg shadow-lg overflow-hidden">
+                <div class="px-6 py-4">
+                    <div class="font-bold text-xl">${ book.fields.name }</div>
+                    <p class="text-gray-700 text-base mb-2">by ${ book.fields.author }</p>
+                    <p class="text-gray-700 text-base">${ book.fields.description }</p>
+                </div>
+                <div class="px-6">
+                    <span class="inline-block bg-blue-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Amount: ${ book.fields.amount }</span>
+                    <span class="inline-block bg-blue-100 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">${ book.fields.category }</span>
+                </div>
+                <div class="flex space-x-2 px-6 py-4">
+                    <div>
+                        <button type="submit" name="Increment" onclick="incrementBook(${book.pk})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Add one book</button>
+                    </div>
+                    <div>
+                        <button type="submit" name="Decrement" onclick="decrementBook(${book.pk})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Subtract one book</button>
+                    </div>
+                    <div>
+                        <button type="submit" name="Delete" onclick="deleteBook(${book.pk})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete book(s)</button>
+                    </div>
+                </div>
+            </div>`
+        })
+
+        document.getElementById("book_count").innerHTML = `There are currently 
+        <span class="font-bold">${totalBooks}</span> book(s) with
+        <span class="font-bold">${books.length}</span> book title(s) stored in the system`
+        document.getElementById("books_card").innerHTML = htmlString
+    } 
+    else {
+        document.getElementById("book_count").innerHTML = `<h5 class="font-bold text-xl">
+        There are no books stored in the system for this account</h5>`
+    }  
+}
+```
+
+### 2. Membuat sebuah tombol yang membuka sebuah modal dengan _form_ untuk menambahkan buku.
+
+Menambahkan button pada header untuk menambahkan buku.
+```html
+<button id="open" class="bg-blue-100 hover:bg-blue-700 hover:text-white text-blue-500 font-bold py-2 px-4 rounded">
+    Add New Book
+</button>
+```
+
+Membuat modals untuk menambahkan buku.
+```html
+<!-- Overlay element -->
+<div id="overlay" class="fixed hidden z-40 w-screen h-screen inset-0 bg-gray-900 bg-opacity-60"></div>
+
+<!-- The dialog -->
+<div id="dialog"
+    class="hidden fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 bg-white rounded-md px-8 py-6 space-y-5 drop-shadow-lg">
+    <h1 class="text-2xl font-bold">Add New Book</h1>
+    <div class="py-5 border-t border-b border-blue-500">
+        <form id="form" onsubmit="return false;">
+            {% csrf_token %}
+            <div class="mb-3 flex">
+                <label for="name" class="font-bold mr-4 mt-2">Name:</label>
+                <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="name" name="name">
+            </div>
+            <div class="mb-3 flex">
+                <label for="author" class="font-bold mr-4 mt-2">Author:</label>
+                <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="author" name="author">
+            </div>
+            <div class="mb-3 flex">
+                <label for="category" class="font-bold mr-4 mt-2">Category:</label>
+                <input type="text" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="category" name="category">
+            </div>
+            <div class="mb-3 flex">
+                <label for="amount" class="font-bold mr-4 mt-2">Amount:</label>
+                <input type="number" class="form-control w-full px-1 rounded-md shadow-sm border-gray-500 border" id="amount" name="amount">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="font-bold">Description:</label>
+                <textarea class="form-control mt-2 block w-full px-1 rounded-md shadow-sm border-gray-500 border" id="description" name="description"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="flex justify-end">
+        <!-- This button is used to close the dialog -->
+        <button type="button" id="close" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
+            Close
+        </button>
+        <!-- This button is used to submit the form -->
+        <button type="button" id="button_add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Add Book
+        </button>
+    </div>
+</div>
+```
+
+Menambahkan script untuk membuka dan menutup modal.
+
+```javascript
+var openButton = document.getElementById('open')
+var dialog = document.getElementById('dialog')
+var closeButton = document.getElementById('close')
+var overlay = document.getElementById('overlay')
+
+// show the overlay and the dialog
+openButton.addEventListener('click', function () {
+    dialog.classList.remove('hidden')
+    overlay.classList.remove('hidden')
+});
+
+// hide the overlay and the dialog
+closeButton.addEventListener('click', function () {
+    dialog.classList.add('hidden')
+    overlay.classList.add('hidden')
+});
+```
+
+### 3. Membuat fungsi _view_ baru untuk menambahkan buku ke dalam basis data.
+
+```python
+@csrf_exempt
+def add_item_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        author = request.POST.get("author")
+        category = request.POST.get("category")
+        amount = request.POST.get("amount")
+        description = request.POST.get("description")
+        user = request.user
+
+        new_book = Item(name=name, author=author, category=category, amount=amount, description=description, user=user)
+        new_book.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+```
+
+**Bonus**: Menambahkan fungsi ajax delete, add, dan decrement.
+
+```python
+@csrf_exempt
+def delete_item_ajax(request, book_id):
+    if request.method == 'DELETE':
+        book = Item.objects.get(pk=book_id, user=request.user)
+        book.delete()
+        return HttpResponse(b"OK", status=200)
+
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def add_book_amount_ajax(request, book_id):
+    if request.method == 'POST':
+        book = Item.objects.get(pk=book_id, user=request.user)
+        book.amount += 1
+        book.save()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def dec_book_amount_ajax(request, book_id):
+    if request.method == 'POST':
+        book = Item.objects.get(pk=book_id, user=request.user)
+        book.amount -= 1
+        if book.amount < 0:
+            book.amount = 0
+        book.save()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
+```
+
+### 4. Membuat path `/create-ajax/` yang mengarah ke fungsi _view_ (termasuk untuk bonus).
+
+```python
+urlpatterns = [
+    ...
+    path('create-ajax/', add_item_ajax, name='add_item_ajax'),
+    path('delete-ajax/<int:book_id>', delete_item_ajax, name='delete_item_ajax'),
+    path('add-book-amount-ajax/<int:book_id>', add_book_amount_ajax, name='add_book_amount_ajax'),
+    path('dec-book-amount-ajax/<int:book_id>', dec_book_amount_ajax, name='dec_book_amount_ajax'),
+]
+```
+
+### 5. Hubungkan form yang telah kamu buat di dalam modal kamu ke path `/create-ajax/`.
+
+Menambahkan _async function_ untuk menghubungkan modal pada `main.html` ke path `/create-ajax/` serta bonus (delete, add, dec)
+```javascript
+function addBook() {
+    fetch("{% url 'main:add_item_ajax' %}", {
+        method: "POST",
+        body: new FormData(document.querySelector('#form'))
+    }).then(refreshItems)
+
+    document.getElementById("form").reset()
+    dialog.classList.add('hidden')
+    overlay.classList.add('hidden')
+
+    return false
+}
+
+document.getElementById("button_add").onclick = addBook
+
+function deleteBook(book_id) {
+    fetch(`delete-ajax/${book_id}`, {
+        method: "DELETE",
+    }).then(refreshItems)
+
+    return false
+}
+
+function incrementBook(book_id) {
+    fetch(`add-book-amount-ajax/${book_id}`, {
+        method: "POST",
+    }).then(refreshItems)
+
+    return false
+}
+
+function decrementBook(book_id) {
+    fetch(`dec-book-amount-ajax/${book_id}`, {
+        method: "POST",
+    }).then(refreshItems)
+
+    return false
+}
+```
+
+### 6. Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar item terbaru tanpa reload halaman utama secara keseluruhan.
+
+Menambahkan `refreshItems()` pada tag `<script></script>`.
+
+### 7. Melakukan perintah `collectstatic`.
+
+Menjalankan perintah `python manage.py collectstatic` untuk mengumpulkan berkas static dari setiap aplikasi ke dalam suatu folder yang dapat dengan mudah disajikan pada produksi.
+
+### 8. Melakukan deployment.
+
+1. Menambahkan `django-environ` pada `requirements.txt`
+2. Menjalankan perintah `pip install -r requirements.txt`
+3. Membuat berkas `Procfile`` yang berisi:
+```
+release: django-admin migrate --noinput
+web: gunicorn library_app.wsgi
+```
+4. Membuat berkas `pbp-deploy.yml` pada folder `.github\workflows` yang berisi:
+```
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  Deployment:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Cloning repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Push to Dokku server
+      uses: dokku/github-action@master
+      with:
+        branch: 'main'
+        git_remote_url: ssh://dokku@${{ secrets.DOKKU_SERVER_IP }}/${{ secrets.DOKKU_APP_NAME }}
+        ssh_private_key: ${{ secrets.DOKKU_SSH_PRIVATE_KEY }}
+```
+5. Membuat berkas `.dockerignore` yang berisi:
+```
+**/*.pyc
+**/*.pyo
+**/*.mo
+**/*.db
+**/*.css.map
+**/*.egg-info
+**/*.sql.gz
+**/__pycache__/
+.cache
+.project
+.idea
+.pydevproject
+.idea/workspace.xml
+.DS_Store
+.git/
+.sass-cache
+.vagrant/
+dist
+docs
+env
+logs
+src/{{ project_name }}/settings/local.py
+src/node_modules
+web/media
+web/static/CACHE
+stats
+Dockerfile
+.gitignore
+Dockerfile
+db.sqlite3
+**/*.md
+logs/
+```
+
+6. Membuat berkas `Dockerfile` yang berisi:
+```
+FROM python:3.10-slim-buster
+
+WORKDIR /app
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    DJANGO_SETTINGS_MODULE=library_app.settings \
+    PORT=8000 \
+    WEB_CONCURRENCY=2
+
+# Install system packages required Django.
+RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN addgroup --system django \
+    && adduser --system --ingroup django django
+
+# Requirements are installed here to ensure they will be cached.
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+# Copy project code
+COPY . .
+
+RUN python manage.py collectstatic --noinput --clear
+
+# Run as non-root user
+RUN chown -R django:django /app
+USER django
+
+# Run application
+# CMD gunicorn library_app.wsgi:application
+```
+
+7. Menambahkan `import environ` dan `import os` pada `settings.py`
+
+8. Menambahkan kode `env = environ.Env()` setelah baris kode `BASE_DIR`.
+
+9. Menambahkan kode berikut setelah baris kode `SECRET_KEY`. 
+```python
+PRODUCTION = env.bool('PRODUCTION', False)
+```
+
+10. Menambahkan kode berikut setelah bagian kode `DATABASES`.
+
+```python
+if PRODUCTION:
+    DEBUG = False
+    DATABASES = {
+        'default': env.db('DATABASE_URL')
+    }
+    DATABASES["default"]["ATOMIC_REQUESTS"] = True
+```
+
+11. Mengatur static url.
+```python
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+```
+
+12. Menambahkan middleware whitenoise.
+```python
+MIDDLEWARE = [
+    ...
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    ...
+]
+```
 
 </details>
 
